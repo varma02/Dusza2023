@@ -1,19 +1,30 @@
 import PySimpleGUI as sg
-sg.theme('DarkBlue14')   # Add a little color to your windows
-# All the stuff inside your window. This is the PSG magic code compactor...
-layout = [  [sg.Text('Some text on Row 1')],
-						[sg.Text('Enter something on Row 2'), sg.InputText()],
-						[sg.OK(), sg.Cancel()]]
 
-# Create the Window
-window = sg.Window('Window Title', layout, no_titlebar=True, )
-# Event Loop to process "events"
-while True:             
-	event, values = window.read()
-	print(event, values)
+def save_reservation(name, phone, date, table):
+    # Itt lehetne az asztalfoglalásokat fájlba menteni vagy adatbázisban tárolni
+    # Ebben a példában csak kiírjuk őket a konzolra
+    print(f"{name}, {phone}, {date}, {table} asztalt foglalt")
 
-	if event in (sg.WIN_CLOSED, 'Cancel'):
-		break
-	
+layout = [
+    [sg.Text("Név"), sg.Input(key="-NAME-")],
+    [sg.Text("Telefonszám"), sg.Input(key="-PHONE-")],
+    [sg.Text("Dátum (YYYY-MM-DD)"), sg.Input(key="-DATE-")],
+    [sg.Text("Asztal száma"), sg.Input(key="-TABLE-")],
+    [sg.Button("Foglalás"), sg.Button("Mégse")]
+]
 
-window.close()
+window = sg.Window("Asztalfoglalás").Layout(layout)
+
+while True:
+    event, values = window.Read()
+    if event == sg.WIN_CLOSED or event == "Mégse":
+        break
+    elif event == "Foglalás":
+        name = values["-NAME-"]
+        phone = values["-PHONE-"]
+        date = values["-DATE-"]
+        table = values["-TABLE-"]
+        save_reservation(name, phone, date, table)
+        sg.Popup("Foglalás megerősítve", auto_close=True)
+
+window.Close()
