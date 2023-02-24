@@ -1,30 +1,30 @@
 import PySimpleGUI as sg
 
-def save_reservation(name, phone, date, table):
-    # Itt lehetne az asztalfoglalásokat fájlba menteni vagy adatbázisban tárolni
-    # Ebben a példában csak kiírjuk őket a konzolra
-    print(f"{name}, {phone}, {date}, {table} asztalt foglalt")
-
 layout = [
     [sg.Text("Név"), sg.Input(key="-NAME-")],
-    [sg.Text("Telefonszám"), sg.Input(key="-PHONE-")],
-    [sg.Text("Dátum (YYYY-MM-DD)"), sg.Input(key="-DATE-")],
+    [sg.Text("Telefonszám"), sg.Input(key="-PHONE-", enable_events=True, size=(20, 1))],
+    [sg.Input(key="-DATE-"), sg.CalendarButton("Dátum kiválasztása", target="-DATE-", key="-CALENDAR-", enable_events=True)],
+    [sg.Text("Időpont"), sg.Input(key="-TIME-", enable_events=True, size=(20, 1))],
     [sg.Text("Asztal száma"), sg.Input(key="-TABLE-")],
-    [sg.Button("Foglalás"), sg.Button("Mégse")]
+    [sg.Button("Foglalás", key="-SUBMIT-")]
 ]
+
+phone_num_chars = ["+", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 window = sg.Window("Asztalfoglalás").Layout(layout)
 
 while True:
     event, values = window.Read()
-    if event == sg.WIN_CLOSED or event == "Mégse":
+    if event == sg.WIN_CLOSED:
         break
-    elif event == "Foglalás":
-        name = values["-NAME-"]
-        phone = values["-PHONE-"]
-        date = values["-DATE-"]
-        table = values["-TABLE-"]
-        save_reservation(name, phone, date, table)
-        sg.Popup("Foglalás megerősítve", auto_close=True)
-
+    elif event == "-SUBMIT-":
+        print("submit")
+    elif event == "-CALENDAR-":
+        print("calendar")
+        window.Element("-DATE-").Update(value=values["-CALENDAR-"].strftime("%Y-%m-%d"))
+    elif event == "-PHONE-":
+        filtered_phone = "".join([char for char in values["-PHONE-"] if char in phone_num_chars])
+        window.Element("-PHONE-").Update(value=filtered_phone)
+        print("phone")
+        
 window.Close()
