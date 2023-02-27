@@ -1,14 +1,14 @@
 import PySimpleGUI as sg
 import new_record
 
-menu_layout = [
-	[sg.Button("Foglalás rögzítése", key="-REC-", expand_x=True), ],
-	[sg.Button("Foglalás törlése", key="-DEL-", expand_x=True), ],
-	[sg.Button("Statisztika", key="-STAT-", expand_x=True), ],
-	[sg.Button("Kilépés", key="-EXIT-", expand_x=True), ],
+layout = [
+	[sg.Button("Foglalás rögzítése", key="-REC-", expand_x=True, font=("Arial", 14)), ],
+	[sg.Button("Foglalás törlése", key="-DEL-", expand_x=True, font=("Arial", 14)), ],
+	[sg.Button("Statisztika", key="-STAT-", expand_x=True, font=("Arial", 14)), ],
+	[sg.Button("Kilépés", key="-EXIT-", expand_x=True, font=("Arial", 14)), ],
 ]
 
-window = sg.Window('Foglalás - MENÜ', menu_layout, resizable=False, size=(200, 140))
+window = sg.Window('Foglalás - MENÜ', menu_layout, resizable=False, size=(200, 170))
 
 while True:
 	event, values = window.read()
