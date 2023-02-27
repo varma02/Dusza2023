@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import new_record
 
 menu_layout = [
 	[sg.Button("Foglalás rögzítése", key="-REC-", expand_x=True), ],
@@ -15,5 +16,6 @@ while True:
 
 	match event:
 		case sg.WIN_CLOSED | "-EXIT-": break
+		case "-REC-": new_record.run()
 
 window.close()
