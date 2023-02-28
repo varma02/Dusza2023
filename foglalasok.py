@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 from old import db
+import datetime
 
 def prn(num):
     n = str(num)
@@ -9,8 +10,7 @@ def prn(num):
     else:
         return f'{n}'
 
-def run():
-
+def all():
     foglalasok = db.readRealFoglalasok()
     frender = []
     for Item in foglalasok:
@@ -22,7 +22,25 @@ def run():
                 f'{ ", ".join(str(e) for e in Item["asztalok"]) }'
             ]
         )
-	
+    return frender
+
+def notall():
+    now = datetime.datetime.now()
+    foglalasok = db.readRealFoglalasok()
+    frender = []
+    for Item in foglalasok:
+        if Item["kezdet"]["honap"] == now.month and Item["kezdet"]["nap"] == now.day:
+            frender.append(
+                [
+                    f'{ Item["nev"] }',
+                    f'{ prn(Item["kezdet"]["honap"]) }.{prn(Item["kezdet"]["nap"])}.   {prn(Item["kezdet"]["ora"])}:{prn(Item["kezdet"]["perc"])} - {prn(Item["befejezes"]["ora"])}:{prn(Item["befejezes"]["perc"])}',
+                    f'{Item["szekek"]}',
+                    f'{ ", ".join(str(e) for e in Item["asztalok"]) }'
+                ]
+            )
+    return frender
+
+def run():
     layout = [
 	    [
             sg.Text("Asztalfoglalási napló", font=('Arial', 18)),
@@ -31,14 +49,14 @@ def run():
             sg.Table(
                 values=frender,
                 headings=[
-                    "Foglaló neve",
-                    "Dátum -tól-ig",
-                    "Székek száma",
-                    "Lefoglalt asztalok"
+                    "Név",
+                    "Dátum",
+                    "Székek",
+                    "Asztalok"
                 ],
-                expand_x=True,
+                # expand_x=True,
                 expand_y=True,
-                auto_size_columns=True,
+                # auto_size_columns=True,
                 vertical_scroll_only=True
             )
             # sg.Column(
