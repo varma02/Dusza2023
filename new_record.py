@@ -1,4 +1,7 @@
 import PySimpleGUI as sg
+from datetime import datetime
+
+import utils
 
 def run():
 
@@ -11,7 +14,9 @@ def run():
 			sg.Input(key="-DATE-", expand_x=True, font=("Arial", 14), enable_events=True)
 		],[
 			sg.Text("Kezdő időpont: ", font=("Arial", 14)), 
-			sg.Input(key="-START-", expand_x=True, font=("Arial", 14))
+			sg.Combo(list(range(6, 23)), 6, key="-START-H-", expand_x=True),
+			sg.Text(":", font=("Arial", 14, "bold")), 
+			sg.Combo(list(range(0, 60)), 0, key="-START-M-", expand_x=True),
 		],[
 			sg.Text("Végső időpont: ", font=("Arial", 14)), 
 			sg.Input(key="-END-", expand_x=True, font=("Arial", 14))
@@ -33,5 +38,15 @@ def run():
 
 		match event:
 			case sg.WIN_CLOSED | "-EXIT-": break
+			case "-SAVE-":
+				# --- ERROR CHECKING ---
+				if values["-NAME-"].strip() == "":
+					sg.PopupOK("Írj be létező nevet!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+					continue
+				
+				try: datetime.strptime(values["-DATE-"], "%Y/%m/%d")
+				except ValueError:
+					sg.PopupOK("Írj be létező dátumot!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+					continue
 
 	window.close()
