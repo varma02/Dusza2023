@@ -68,8 +68,8 @@ def get_records(year:int=None, filter_canceled=False, filter_today=False):
 	if filter_canceled:
 		return canceled
 	else:
-		pass #TODO: IMPLEMENT CANCELED RECORD FILTERING
+		raise Exception("TODO: IMPLEMENT FILTERING FOR CANCELED RECORDS")
 
 
 def add_records(*records:Record):
-	pass
+	raise Exception("TODO: IMPLEMENT NEW RECORD")
