@@ -72,6 +72,7 @@ def run():
 			case sg.WIN_CLOSED | "-EXIT-": break
 			case "-SAVE-":
 				_validate_input(values)
+				raise Exception("TODO: IMPLEMENT RECORD SAVING")
 					
 
 	window.close()
