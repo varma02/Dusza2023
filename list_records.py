@@ -43,21 +43,24 @@ def notall():
 def run():
 	layout = [
 		[
-			sg.Text("Asztalfoglalási napló", font=('Arial', 18)),
+			sg.Text("Asztalfoglalási napló", font=('Arial', 18), expand_x=True),
+			sg.Input("Keresés", size=(20, None), font=('Arial', 12)),
+			sg.Checkbox("Csak maiak", font=('Arial', 12))
 		],
 		[
-			sg.Table(
-				values=frender,
+			sg.Table(values=all(),
 				headings=[
 					"Név",
 					"Dátum",
 					"Székek",
 					"Asztalok"
 				],
-				# expand_x=True,
+				font=('Arial', 12),
+				expand_x=True,
 				expand_y=True,
-				# auto_size_columns=True,
-				vertical_scroll_only=True
+				auto_size_columns=True,
+				vertical_scroll_only=True,
+				row_height=14,
 			)
 			# sg.Column(
 			#     layout=frender,
@@ -70,8 +73,10 @@ def run():
 		
 	]
 
-	window = sg.Window('Foglalás - Rögzítés', layout=layout, resizable=False, size=(600, 200))
-	
+	window = sg.Window('Foglalás - Lista', layout=layout, resizable=(False, True), size=(600, 300))
+	window.finalize()
+	window.set_min_size((500, 150))
+
 	while True:
 		event, values = window.read()
 		print(event, values)
