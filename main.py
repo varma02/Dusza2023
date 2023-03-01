@@ -1,9 +1,9 @@
 import PySimpleGUI as sg
-import new_record
+import new_record, list_records
 
 layout = [
-	[sg.Button("Foglalás rögzítése", key="-REC-", expand_x=True, font=("Arial", 14)), ],
-	[sg.Button("Foglalás törlése", key="-DEL-", expand_x=True, font=("Arial", 14)), ],
+	[sg.Button("Foglalás rögzítése", key="-NEW-", expand_x=True, font=("Arial", 14)), ],
+	[sg.Button("Foglalások listája", key="-LIST-", expand_x=True, font=("Arial", 14)), ],
 	[sg.Button("Statisztika", key="-STAT-", expand_x=True, font=("Arial", 14)), ],
 	[sg.Button("Kilépés", key="-EXIT-", expand_x=True, font=("Arial", 14)), ],
 ]
@@ -16,6 +16,7 @@ while True:
 
 	match event:
 		case sg.WIN_CLOSED | "-EXIT-": break
-		case "-REC-": new_record.run()
+		case "-NEW-": new_record.run()
+		case "-LIST-": list_records.run()
 
 window.close()

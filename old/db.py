@@ -18,7 +18,7 @@ def readAsztalok():
 #         print(asztalok)
 
 def readRawFoglalasok():
-    with open("data/foglalasok.txt", "r", encoding="utf-8") as f:
+    with open("data/foglalasok/2022.txt", "r", encoding="utf-8") as f:
         arr = []
         for line in f.readlines():
             arr.append(line.strip().split(";"))
@@ -26,7 +26,7 @@ def readRawFoglalasok():
 
 def readFoglalasok():
     foglalasok =  []
-    with open("data/foglalasok.txt", "r", encoding="utf-8") as f:
+    with open("data/foglalasok/2022.txt", "r", encoding="utf-8") as f:
         for sor in f.readlines():
             try:
                 sor = sor.strip().split(";")
@@ -93,5 +93,5 @@ def getSzabadAsztalok(honap, nap, ora, perc):
 
 
 def appendFoglalasok(name, fogl, start, end, szekek, *asztalok) -> None:
-    with open("data/foglalasok.txt", 'a') as f:
+    with open("data/foglalasok/2022.txt", 'a') as f:
         f.write(f"\n{name};{fogl};{start};{end};{szekek};{';'.join(asztalok)}")
