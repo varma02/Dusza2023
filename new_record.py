@@ -76,3 +76,7 @@ def run():
 					
 
 	window.close()
+
+
+if __name__ == "__main__":
+	run()

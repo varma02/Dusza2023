@@ -1,4 +1,7 @@
 from datetime import datetime
+import glob
+
+DATA_DIR = "./data/"
 
 class Record():
 	def __init__(self, name:str, type:str, start:datetime, end:datetime, chairs:int, tables:list[int]):
@@ -17,7 +20,7 @@ class Table():
 
 
 def _read_db(year:int) -> list[Record]:
-	path = f"./data/foglalasok/{year}.txt"
+	path = f"{DATA_DIR}/foglalasok/{year}.txt"
 	records: list[Record] = []
 	with open(path, "r", encoding="utf-8") as f:
 		for line in f.readlines():
@@ -33,7 +36,7 @@ def _read_db(year:int) -> list[Record]:
 	return records
 
 def _append_db(*records:Record, year:int):
-	path = f"./data/foglalasok/{year}.txt"
+	path = f"{DATA_DIR}/foglalasok/{year}.txt"
 	open(path, "w", encoding="utf-8").close()
 	with open(path, "a", encoding="utf-8") as f:
 		for r in records:
@@ -43,7 +46,7 @@ def _append_db(*records:Record, year:int):
 def get_tables() -> list[Table]:
 	""" Returns a list of all tables. """
 	tables: list[Table] = []
-	with open("./data/asztalok.txt", "r", encoding="utf-8") as f:
+	with open(f"{DATA_DIR}/asztalok.txt", "r", encoding="utf-8") as f:
 		for line in f.readlines():
 			line = line.split(";")
 			tables.append(Table(
@@ -77,6 +80,9 @@ def get_records(year:int=None, filter_canceled=False, filter_today=False):
 				not_canceled_records.append(r)
 		return not_canceled_records
 
+
+def get_years() -> list[int]:
+	return list(map(lambda x: int(x[:-4]), glob.glob("*.txt", root_dir=f"{DATA_DIR}/foglalasok/", recursive=False)))
 
 def add_records(*records:Record):
 	raise Exception("TODO: IMPLEMENT NEW RECORD")
