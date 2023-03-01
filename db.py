@@ -68,7 +68,14 @@ def get_records(year:int=None, filter_canceled=False, filter_today=False):
 	if filter_canceled:
 		return canceled
 	else:
-		raise Exception("TODO: IMPLEMENT FILTERING FOR CANCELED RECORDS")
+		not_canceled_records: list[Record] = []
+		for r in records:
+			for c in canceled:
+				if (c.name == r.name and c.start == r.start):
+					break
+			else:
+				not_canceled_records.append(r)
+		return not_canceled_records
 
 
 def add_records(*records:Record):
