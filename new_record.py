@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 from datetime import datetime
+import db
 
 def _validate_input(values) -> bool:
 	if values["-NAME-"].strip() == "":
@@ -71,8 +72,32 @@ def run():
 		match event:
 			case sg.WIN_CLOSED | "-EXIT-": break
 			case "-SAVE-":
-				_validate_input(values)
-				raise Exception("TODO: IMPLEMENT RECORD SAVING")
+				if _validate_input(values):
+					start = datetime.strptime(f"{values['-DATE-']} {values['-START-H-']}:{values['-START-M-']}", "%Y/%m/%d %H:%M")
+					end = datetime.strptime(f"{values['-DATE-']} {values['-END-H-']}:{values['-END-M-']}", "%Y/%m/%d %H:%M")
+					tables = db.reserve_table(
+						name = values["-NAME-"],
+						start = start,
+						end = end,
+						chairs = int(values["-CHAIR-"]),
+						type = "B" if values["-IN-"] else "K",
+					)
+
+					if tables == []:
+						sg.PopupOK("Nincs elég hely!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+						continue
+					elif tables == False:
+						sg.PopupOK("Nem foglalhatsz kétszer ugyan arra az időpontra!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+						continue
+
+					db.append_db(db.Record(
+						name = values["-NAME-"],
+						start = start,
+						end = end,
+						chairs = int(values["-CHAIR-"]),
+						type = "B" if values["-IN-"] else "K",
+						tables = tables,
+					), year=start.year)
 					
 
 	window.close()

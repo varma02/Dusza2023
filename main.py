@@ -9,7 +9,7 @@ layout = [
 	[sg.Button("Kilépés", key="-EXIT-", expand_x=True, font=("Arial", 14)), ],
 ]
 
-window = sg.Window('Foglalás - MENÜ', layout, resizable=False, size=(200, 170))
+window = sg.Window('Foglalás - MENÜ', layout, resizable=False, size=(200, 210))
 
 while True:
 	event, values = window.read()
