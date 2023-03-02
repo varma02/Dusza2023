@@ -54,7 +54,7 @@ def get_tables() -> list[Table]:
 	tables: list[Table] = []
 	with open(f"{DATA_DIR}/asztalok.txt", "r", encoding="utf-8") as f:
 		for line in f.readlines():
-			line = line.split(";")
+			line = line.strip().split(";")
 			tables.append(Table(
 				id = int(line[0]),
 				chairs = int(line[1]),
@@ -105,22 +105,23 @@ def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str) 
 
 	reserved_tables = [t for r in intersecting_records for t in r.tables]
 	
-	tables = [x for x in get_tables() if x not in reserved_tables]
+	tables = [x for x in get_tables() if x.type == type and x.id not in reserved_tables]
 	tables.sort(key=lambda x: x.chairs)
 	print(tables)
 	print(reserved_tables)
 	print(intersecting_records)
 
-	reserving = []
+	for t in tables:
+		if t.chairs >= chairs:
+			return [t,]
 
-	while chairs > 0 and len(tables) > 0:
-		if tables[0].chairs >= chairs:
-			reserving.append(tables[0])
-			return reserving
-		else:
-			table1 = tables.pop(0)
-			table2 = tables.pop(0)
-			chairs -= table1.chairs + table2.chairs - 2
-			reserving.append(table1, table2)
+	reserving = []
+	table_seats = 0
+	while len(tables) > 0:
+		table = tables.pop(0)
+		chairs -= table_seats + table.chairs - 2 if table_seats > 2 and table.chairs > 2 else table_seats + table.chairs
+		reserving.append(table)
+
+		if chairs <= 0: return reserving
 	
 	return []

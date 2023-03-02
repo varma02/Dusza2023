@@ -2,9 +2,12 @@ import PySimpleGUI as sg
 from datetime import datetime
 import db
 
+def _popup_ok(text:str):
+	return sg.PopupOK(text, title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+
 def _validate_input(values) -> bool:
 	if values["-NAME-"].strip() == "":
-		sg.PopupOK("Írj be létező nevet!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+		_popup_ok("Írj be létező nevet!")
 		return False
 
 	try: 
@@ -12,20 +15,20 @@ def _validate_input(values) -> bool:
 		start_datetime = datetime.combine(date, datetime.strptime(f'{values["-START-H-"]}:{values["-START-M-"]}', "%H:%M").time())
 		end_datetime = datetime.combine(date, datetime.strptime(f'{values["-END-H-"]}:{values["-END-M-"]}', "%H:%M").time())
 		if start_datetime < datetime.now():
-			sg.PopupOK("Az időpont nem lehet a múltban!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+			_popup_ok("Az időpont nem lehet a múltban!")
 			return False
 		if start_datetime > end_datetime:
-			sg.PopupOK("A kezdő időpont nem lehet a végső előtt!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+			_popup_ok("A kezdő időpont nem lehet a végső előtt!")
 			return False
 	except ValueError:
-		sg.PopupOK("Létező időpontot adj meg!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+		_popup_ok("Létező időpontot adj meg!")
 		return False
 
 	try: 
 		if int(values["-CHAIR-"]) <= 0:
 			raise ValueError()
 	except ValueError:
-		sg.PopupOK("A székek száma csak pozitív egész lehet!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+		_popup_ok("A székek száma csak pozitív egész lehet!")
 		return False
 	
 	return True
@@ -84,10 +87,10 @@ def run():
 					)
 
 					if tables == []:
-						sg.PopupOK("Nincs elég hely!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+						_popup_ok("Nincs elég hely!")
 						continue
 					elif tables == False:
-						sg.PopupOK("Nem foglalhatsz kétszer ugyan arra az időpontra!", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+						_popup_ok("Nem foglalhatsz kétszer ugyan arra az időpontra!")
 						continue
 
 					db.append_db(db.Record(
@@ -95,9 +98,12 @@ def run():
 						start = start,
 						end = end,
 						chairs = int(values["-CHAIR-"]),
-						type = "B" if values["-IN-"] else "K",
+						type = "F",
 						tables = tables,
 					), year=start.year)
+
+					_popup_ok("Foglalás mentve")
+					break
 					
 
 	window.close()
