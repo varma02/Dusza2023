@@ -42,11 +42,11 @@ def append_db(*records:Record, year:int):
 	if glob.glob(path):
 		with open(path, "a", encoding="utf-8") as f:
 			for r in records:
-				f.write(f"\n{r.name};{r.type};{r.start.strftime('%Y-%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
+				f.write(f"\n{r.name};{r.type};{r.start.strftime('%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
 	else:
 		with open(path, "w", encoding="utf-8") as f:
 			for r in records:
-				f.write(f"{r.name};{r.type};{r.start.strftime('%Y-%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
+				f.write(f"{r.name};{r.type};{r.start.strftime('%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
 
 
 def get_tables() -> list[Table]:
