@@ -25,6 +25,8 @@ def _read_db(year:int) -> list[Record]:
 	with open(path, "r", encoding="utf-8") as f:
 		for line in f.readlines():
 			line = line.split(";")
+			if len(line) < 6: continue
+
 			records.append(Record(
 				name = line[0],
 				type = line[1],
@@ -37,10 +39,14 @@ def _read_db(year:int) -> list[Record]:
 
 def append_db(*records:Record, year:int):
 	path = f"{DATA_DIR}/foglalasok/{year}.txt"
-	open(path, "w", encoding="utf-8").close()
-	with open(path, "a", encoding="utf-8") as f:
-		for r in records:
-			f.write(f"\n{r.name};{r.type};{r.start.strftime('%Y-%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x),r.tables))}")
+	if glob.glob(path):
+		with open(path, "a", encoding="utf-8") as f:
+			for r in records:
+				f.write(f"\n{r.name};{r.type};{r.start.strftime('%Y-%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
+	else:
+		with open(path, "w", encoding="utf-8") as f:
+			for r in records:
+				f.write(f"{r.name};{r.type};{r.start.strftime('%Y-%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
 
 
 def get_tables() -> list[Table]:
@@ -99,8 +105,11 @@ def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str) 
 
 	reserved_tables = [t for r in intersecting_records for t in r.tables]
 	
-	tables = [x for x in get_tables() if x not in reserved_tables and x.type == type]
-	tables.sort(key=lambda x: x["chairs"])
+	tables = [x for x in get_tables() if x not in reserved_tables]
+	tables.sort(key=lambda x: x.chairs)
+	print(tables)
+	print(reserved_tables)
+	print(intersecting_records)
 
 	reserving = []
 
