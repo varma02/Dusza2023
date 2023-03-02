@@ -3,6 +3,7 @@ import new_record, list_records
 
 layout = [
 	[sg.Button("Foglalás rögzítése", key="-NEW-", expand_x=True, font=("Arial", 14)), ],
+	[sg.Button("Foglalás törlése", key="-DEL-", expand_x=True, font=("Arial", 14)), ],
 	[sg.Button("Foglalások listája", key="-LIST-", expand_x=True, font=("Arial", 14)), ],
 	[sg.Button("Statisztika", key="-STAT-", expand_x=True, font=("Arial", 14)), ],
 	[sg.Button("Kilépés", key="-EXIT-", expand_x=True, font=("Arial", 14)), ],
