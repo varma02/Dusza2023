@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-import new_record, list_records
+import new_record, list_records, del_records
 
 layout = [
 	[sg.Button("Foglalás rögzítése", key="-NEW-", expand_x=True, font=("Arial", 14)), ],
@@ -16,8 +16,10 @@ while True:
 	print(event, values)
 
 	match event:
-		case sg.WIN_CLOSED | "-EXIT-": break
 		case "-NEW-": new_record.run()
+		case "-DEL-": del_records.run()
 		case "-LIST-": list_records.run()
+		case "-STAT-": pass
+		case sg.WIN_CLOSED | "-EXIT-": break
 
 window.close()
