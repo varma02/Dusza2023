@@ -1,3 +1,4 @@
+import PySimpleGUI as sg
 from datetime import date, datetime
 import db
 
@@ -45,6 +46,8 @@ def run():
     #for i in pairs:
     #    print(i[0].start, i[0].tables, "   ", i[1].start, i[1].tables)
 
+
+    # Change 2023.txt for optimization!
     outsideRecords = []
     insideRecords = []
     for records in pairs:
@@ -72,6 +75,7 @@ def run():
     for i in insideRecords:
         print(i.tables)
     
+    _createWindow()
 
 
 
@@ -125,6 +129,25 @@ def checkDuplication(recordCheck, records):
     if _count > 1: return True
     else: return False """
 
+def _createWindow():
+    layout = [[sg.Text("Külső")],
+              [sg.Text("  Foglalási igények száma: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Azonnal teljesített foglalások: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Várólistás foglalások száma: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("    Ebből teljesített: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Lemondott foglalások száma: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Nem teljesített foglalások száma: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("")],
+              [sg.Text("Belső")],
+              [sg.Text("  Foglalási igények száma: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Azonnal teljesített foglalások: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Várólistás foglalások száma: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("    Ebből teljesített: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Lemondott foglalások száma: "), sg.Text("PLACEHOLDER")],
+              [sg.Text("  Nem teljesített foglalások száma: "), sg.Text("PLACEHOLDER")]]
+    window = sg.Window("Statistics", layout)
 
-
-run()
+    while True:
+        event, values = window.read()
+        match event:
+            case sg.WIN_CLOSED | "-EXIT-": break
