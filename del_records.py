@@ -65,7 +65,7 @@ def run():
 			r = records[record_id]
 			r.type = "L"
 			db.append_db(r)
-			i_records = db.intersect_records(r.start, r.end, db.get_records(r.start.year, True))
+			i_records = db.intersect_records(r.start, r.end, filter(lambda x: x.tables == [-1,], db.get_records(r.start.year)))
 			if i_records:
 				w_record = i_records[0]
 				tables = db.reserve_table(w_record.name, w_record.start, w_record.end, w_record.chairs)
