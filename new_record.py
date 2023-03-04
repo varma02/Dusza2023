@@ -87,8 +87,11 @@ def run():
 					)
 
 					if tables == []:
-						_popup_ok("Nincs elég hely!")
-						continue
+						waitlist = sg.PopupYesNo("\tNincs elég hely!\nSzeretnél várólistára kerülni?", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+						if waitlist == "Yes":
+							tables = [db.Table(-1, 0, "NA"), ]
+						else:
+							tables = [db.Table(-2, 0, "NA"), ]
 					elif tables == False:
 						_popup_ok("Nem foglalhatsz kétszer ugyan arra az időpontra!")
 						continue
