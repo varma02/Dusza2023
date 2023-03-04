@@ -4,14 +4,13 @@ import glob
 DATA_DIR = "./data/"
 
 class Record():
-	def __init__(self, name:str, type:str, start:datetime, end:datetime, chairs:int, tables:list[int], location:str):
+	def __init__(self, name:str, type:str, start:datetime, end:datetime, chairs:int, tables:list[int]):
 		self.name = name
 		self.type = type
 		self.start = start
 		self.end = end
 		self.chairs = chairs
 		self.tables = tables
-		self.location = location
 
 class Table():
 	def __init__(self, id:int, chairs:int, type:str):
@@ -90,6 +89,8 @@ def get_records(year:int=None, filter_canceled=False, filter_today=False):
 
 
 def get_years() -> list[int]:
+	""" Returns a list of all years that are in the database.
+	"""
 	return list(map(lambda x: int(x[:-4]), glob.glob("*.txt", root_dir=f"{DATA_DIR}/foglalasok/", recursive=False)))
 
 def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str) -> list[Table] | bool:
