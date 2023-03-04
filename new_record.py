@@ -105,7 +105,7 @@ def run():
 						chairs = int(values["-CHAIR-"]),
 						type = "F",
 						tables = tables,
-					), year=start.year)
+					))
 
 					_popup_ok("Foglalás mentve")
 					break

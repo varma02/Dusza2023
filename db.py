@@ -4,13 +4,14 @@ import glob
 DATA_DIR = "./data/"
 
 class Record():
-	def __init__(self, name:str, type:str, start:datetime, end:datetime, chairs:int, tables:list[int]):
+	def __init__(self, name:str, type:str, start:datetime, end:datetime, chairs:int, tables:list[int], location:str):
 		self.name = name
 		self.type = type
 		self.start = start
 		self.end = end
 		self.chairs = chairs
 		self.tables = tables
+		self.location = location
 
 class Table():
 	def __init__(self, id:int, chairs:int, type:str):
@@ -37,16 +38,17 @@ def _read_db(year:int) -> list[Record]:
 			))
 	return records
 
-def append_db(*records:Record, year:int):
-	path = f"{DATA_DIR}/foglalasok/{year}.txt"
+def append_db(record:Record) -> None:
+	""" Appends a record at the end of the database.
+	`record`: A db.Record object
+	"""
+	path = f"{DATA_DIR}/foglalasok/{record.start.year}.txt"
 	if glob.glob(path):
 		with open(path, "a", encoding="utf-8") as f:
-			for r in records:
-				f.write(f"\n{r.name};{r.type};{r.start.strftime('%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
+			f.write(f"\n{record.name};{record.type};{record.start.strftime('%m-%d %H:%M')};{record.end.strftime('%H:%M')};{record.chairs};{';'.join(map(lambda x: str(x.id),record.tables))}")
 	else:
 		with open(path, "w", encoding="utf-8") as f:
-			for r in records:
-				f.write(f"{r.name};{r.type};{r.start.strftime('%m-%d %H:%M')};{r.end.strftime('%H:%M')};{r.chairs};{';'.join(map(lambda x: str(x.id),r.tables))}")
+			f.write(f"{record.name};{record.type};{record.start.strftime('%m-%d %H:%M')};{record.end.strftime('%H:%M')};{record.chairs};{';'.join(map(lambda x: str(x.id),record.tables))}")
 
 
 def get_tables() -> list[Table]:
