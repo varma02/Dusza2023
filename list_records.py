@@ -66,7 +66,7 @@ def run():
 				expand_y = True,
 				auto_size_columns = True,
 				vertical_scroll_only = True,
-				row_height = 14,
+				row_height = 18,
 			)
 		]
 	]

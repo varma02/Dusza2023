@@ -64,9 +64,10 @@ def run():
 			sg.Button("Mégse", key="-EXIT-", font=("Arial", 14)),
 			sg.Button("Mentés", key="-SAVE-", font=("Arial", 14)),
 		],
-	], resizable=False, size=(600, 200))
+	], resizable=True, size=(600, 250))
 	
 	window.finalize()
+	window.set_min_size((450, 230))
 	window["-DATE-"].update(datetime.now().strftime("%Y/%m/%d"))
 
 	while True:
