@@ -3,7 +3,8 @@ from datetime import datetime
 import db
 
 def _popup_ok(text:str):
-	return sg.PopupOK(text, title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+	return sg.PopupOK(text, title="Hiba", no_titlebar=True, grab_anywhere=True, 
+	keep_on_top=True, font=("Arial", 14, "bold"))
 
 def _validate_input(values) -> bool:
 	if values["-NAME-"].strip() == "":
@@ -87,7 +88,8 @@ def run():
 					)
 
 					if tables == []:
-						waitlist = sg.PopupYesNo("\tNincs elég hely!\nSzeretnél várólistára kerülni?", title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
+						waitlist = sg.PopupYesNo("\tNincs elég hely!\nSzeretnél várólistára kerülni?", 
+						title="Hiba", no_titlebar=True, grab_anywhere=True, keep_on_top=True, font=("Arial", 14, "bold"))
 						if waitlist == "Yes":
 							tables = [db.Table(-1, 0, "NA"), ]
 						else:
