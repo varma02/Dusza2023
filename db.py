@@ -93,14 +93,18 @@ def get_years() -> list[int]:
 	"""
 	return list(map(lambda x: int(x[:-4]), glob.glob("*.txt", root_dir=f"{DATA_DIR}/foglalasok/", recursive=False)))
 
-def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str) -> list[Table] | bool:
-	""" Returns a list of tables to be reserved. Or if there are not enough of tables, it returns an empty list and if the person alredy reserved in this interval, it returns false.
-	"""
-	records = get_records(start.year)
+def intersect_records(start:datetime, end:datetime, records:list[Record]):
 	intersecting_records:list[Record] = []
 	for r in records:
 		if max(r.start, start) <= min(r.end, end):
 			intersecting_records.append(r)
+	return intersecting_records
+
+def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str = None) -> list[Table] | bool:
+	""" Returns a list of tables to be reserved. Or if there are not enough of tables, it returns an empty list and if the person alredy reserved in this interval, it returns false.
+	"""
+	records = get_records(start.year)
+	intersecting_records = intersect_records(start, end, records)
 
 	for r in intersecting_records:
 		if r.name == name:
@@ -108,7 +112,10 @@ def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str) 
 
 	reserved_tables = [t for r in intersecting_records for t in r.tables]
 	
-	tables = [x for x in get_tables() if x.type == type and x.id not in reserved_tables]
+	if type:
+		tables = [x for x in get_tables() if x.type == type and x.id not in reserved_tables]
+	else:
+		tables = [x for x in get_tables() if x.id not in reserved_tables]
 	tables.sort(key=lambda x: x.chairs)
 	print(tables)
 	print(reserved_tables)

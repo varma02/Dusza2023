@@ -10,10 +10,10 @@ def generate_layout(year, query:str = None):
 			layout.append([
 				sg.Text(item.name, font=("Arial", 11, "bold")),
 				sg.Text(f"{item.start.strftime('%Y/%m/%d %H:%M')} - {item.end.strftime('%H:%M')}", expand_x=True, font=("Arial", 11)),
-				sg.Button("Lemondás", button_color=('white', "red"), key=f"-DEL-{index}-", font=("Arial", 12)),
+				sg.Button("Lemondás", button_color=('white', "red"), key=f"-DEL-{index}", font=("Arial", 12)),
 			])
 
-	return [
+	return (records, [
 		[
 			sg.Text("Foglalás lemondása", font=('Arial', 18), expand_x=True),
 			sg.Input(query, key="-QUERY-", enable_events=True, size=(15, None)),
@@ -27,25 +27,26 @@ def generate_layout(year, query:str = None):
 			expand_y=True,
 			key="-LIST-",
 		),]
-	]
+	])
 
 
 def create_window(year, query):
+	records, layout = generate_layout(year, query)
 	window = sg.Window(
 		title = 'Foglalás - Lemondás', 
-		layout = generate_layout(year, query), 
+		layout = layout, 
 		resizable = True, 
 		size = (600, 300))
 	window.finalize()
 	window.set_min_size((490, 150))
-	return window
+	return (window, records)
 
 
 
 def run():    
 	query = ""
 	year = datetime.now().year
-	window = create_window(year, query)
+	window, records = create_window(year, query)
 
 	while True:
 		event, values = window.read()
@@ -60,7 +61,17 @@ def run():
 			case sg.WIN_CLOSED | "-EXIT-": break
 
 		if event.startswith("-DEL-"):
-			raise Exception("TODO: Implement record deletion")
+			record_id = int(event.split("-")[-1])
+			r = records[record_id]
+			r.type = "L"
+			db.append_db(r)
+			i_records = db.intersect_records(r.start, r.end, db.get_records(r.start.year, True))
+			if i_records:
+				w_record = i_records[0]
+				tables = db.reserve_table(w_record.name, w_record.start, w_record.end, w_record.chairs)
+				if tables:
+					w_record.tables = tables
+					db.append_db(w_record)
 
 	window.close()
 
