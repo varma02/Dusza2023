@@ -37,7 +37,7 @@ def create_window(year, query):
 		resizable = True, 
 		size = (600, 300))
 	window.finalize()
-	window.set_min_size((470, 150))
+	window.set_min_size((490, 150))
 	return window
 
 
