@@ -56,8 +56,8 @@ A program egy listát fog mutatni a keresési feltételeknek megfelelően, és e
 Ahhoz, hogy az eddigi foglalásokat meg lehessen tekinteni, a felhasználónak a *"Foglalások listája"* gombot kell működtetnie.
 ![image](https://user-images.githubusercontent.com/57862878/222977996-4e6a7b81-0610-450f-8cab-d8840f5cacbb.png)
 Annak érdekében, hogy a foglalásokat ellenőrző munkatárs hatékonyan a kívánt információhoz juthasson szűrési lehetőségeket készítettünk. Lehetősége van az évet kiválasztania, ezen kívül az aktuális napi foglalásokat is megtekintheti.
-![image](https://user-images.githubusercontent.com/57862878/222978021-bc9c2ea5-cac3-4608-b9ef-100eac8e3b44.png)
-![image](https://user-images.githubusercontent.com/57862878/222978034-36708ccd-85b8-438a-814f-c375989f4daf.png)
+![image](https://user-images.githubusercontent.com/57862878/222980106-56fd0e60-1f7b-4a7a-ab33-821d1370b511.png)
+
 
 A megjelenő táblázatban a következő oszlopok találhatóak: Név, Dátum (kezdő- hónap, nap, óra, perc; végző óra, perc), Székek száma, és a lefoglalt asztalok számai. A csúszkát használva lehet a többi, a képernyőről lelógó adatot megtekinteni. Igény esetén oszloponként, értékek szerint is lehet rendezni úgy, hogy a táblázat címsorában a kívánt rendezési szempontra nyom.
 
