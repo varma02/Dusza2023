@@ -64,7 +64,9 @@ def run():
 			record_id = int(event.split("-")[-1])
 			r = records[record_id]
 			r.type = "L"
+			r.tables = [db.Table(x, -1, "UNK") for x in r.tables]
 			db.append_db(r)
+
 			i_records = db.intersect_records(r.start, r.end, filter(lambda x: x.tables == [-1,], db.get_records(r.start.year)))
 			if i_records:
 				w_record = i_records[0]
@@ -72,6 +74,8 @@ def run():
 				if tables:
 					w_record.tables = tables
 					db.append_db(w_record)
+				
+				print(i_records, tables)
 
 	window.close()
 

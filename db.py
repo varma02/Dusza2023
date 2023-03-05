@@ -39,6 +39,7 @@ def _read_db(year:int) -> list[Record]:
 
 def append_db(record:Record) -> None:
 	""" Appends a record at the end of the database.
+	!!! Record.tables must be a list of db.Table objects !!!
 	`record`: A db.Record object
 	"""
 	path = f"{DATA_DIR}/foglalasok/{record.start.year}.txt"
@@ -112,7 +113,7 @@ def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str =
 	intersecting_records = intersect_records(start, end, records)
 
 	for r in intersecting_records:
-		if r.name == name:
+		if r.name == name and r.tables != [-1,]:
 			return False
 
 	reserved_tables = [t for r in intersecting_records for t in r.tables]
