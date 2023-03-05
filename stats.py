@@ -1,136 +1,42 @@
-"""
 import PySimpleGUI as sg
 from datetime import date, datetime
 import db
 
-def run():
-	while True:
-		try:
-        
-			#dateStartH = int(input("Kezdő hónap: "))
-			#dateStartD = int(input("Kezdő nap: "))
-			#dateEndH = int(input("Végző hónap: "))
-			#dateEndD = int(input("Végző nap: "))
-            
-			dateStartH = 1
-			dateStartD = 1
-			dateEndH = 12
-			dateEndD = 12
-			if date(datetime.now().year, dateStartH, dateStartD) > date(datetime.now().year, dateEndH, dateEndD):
-				raise ValueError
-			else:
-				dateStart = date(datetime.now().year, dateStartH, dateStartD)
-				dateEnd = date(datetime.now().year, dateEndH, dateEndD)
-			break
-		except ValueError:
-			print("Helytelen dátumok!")
-			continue
-	
-	recordsInRange = []
-	for record in db.get_records(): 
-		if dateStart <= date(record.start.year, record.start.month, record.start.day) <= dateEnd:
-			recordsInRange.append(record)
-	for record in db.get_records(filter_canceled=True):
-		if dateStart <= date(record.start.year, record.start.month, record.start.day) <= dateEnd:
-			recordsInRange.append(record)
-	
-	for i in recordsInRange:
-		print(i.tables)
-	print()	
+def _popup_ok(text:str):
+	return sg.PopupOK(text, title="Hiba", no_titlebar=True, grab_anywhere=True, 
+	keep_on_top=True, font=("Arial", 14, "bold"))
 
-	pairs = []
-	for record in recordsInRange:
-		if record.tables[0] == -1:
-			for checkRecord in recordsInRange:
-				if checkRecord != record and (record.name == checkRecord.name and record.start == checkRecord.start):
-					pairs.append([record, checkRecord])
+def _dateInput():
+	window = sg.Window("ASD", [
+		[sg.CalendarButton("Válassz dátumot", target="-DATE1-", font=("Arial", 14), format="%Y/%m/%d"), 
+		sg.Input(key="-DATE1-", expand_x=True, font=("Arial", 14), enable_events=True)],
+		[sg.CalendarButton("Válassz dátumot", target="-DATE2-", font=("Arial", 14), format="%Y/%m/%d"), 
+		sg.Input(key="-DATE2-", expand_x=True, font=("Arial", 14), enable_events=True)],
+		[sg.Button("Mentés", key="-SAVE-", font=("Arial", 14))]
+	])
 
-
-	outsideRecords = []
-	insideRecords = []
-	for records in pairs:
-		for table in db.get_tables():
-			if records[1].tables[0] == table.id and table.type == "K": 
-				outsideRecords.append(records[0])
-				outsideRecords.append(records[1])
-			elif records[1].tables[0] == table.id and table.type == "B":
-				insideRecords.append(records[0])
-				insideRecords.append(records[1])
-	
-	for record in recordsInRange:
-		for table in db.get_tables():
-			if record.tables[0] == table.id and table.type == "K" and record not in outsideRecords:
-				outsideRecords.append(record)
-			elif record.tables[0] == table.id and table.type == "B" and record not in insideRecords:
-				insideRecords.append(record)
-
-	for i in recordsInRange:
-		print(i.tables)
-	print()
-	for i in outsideRecords:
-		print(i.tables)
-	print()
-	for i in insideRecords:
-		print(i.tables)
-	
-	#_createWindow()
-
-def _createWindow():
-	layout = [
-		[sg.Text("Külső")],
-		[sg.Text("  Foglalási igények száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Várólistás foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("    Ebből teljesített: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Lemondott foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Nem teljesített foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("")],
-		[sg.Text("Belső")],
-		[sg.Text("  Foglalási igények száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Várólistás foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("    Ebből teljesített: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Lemondott foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Nem teljesített foglalások száma: "), sg.Text("PLACEHOLDER")]]
-	window = sg.Window("Statistics", layout)
-
+	global dateStart
+	global dateEnd
 	while True:
 		event, values = window.read()
 		match event:
 			case sg.WIN_CLOSED | "-EXIT-": break
-
-run()
-"""
-
-import PySimpleGUI as sg
-from datetime import date, datetime
-import db
-
-
-def _dateInput():
-	while True:
-		try:
-        
-			#dateStartH = int(input("Kezdő hónap: "))
-			#dateStartD = int(input("Kezdő nap: "))
-			#dateEndH = int(input("Végző hónap: "))
-			#dateEndD = int(input("Végző nap: "))
-            
-			dateStartH = 1
-			dateStartD = 1
-			dateEndH = 12
-			dateEndD = 31
-			if date(datetime.now().year, dateStartH, dateStartD) > date(datetime.now().year, dateEndH, dateEndD):
-				raise ValueError
-			else:
-				global dateStart
-				global dateEnd
-				dateStart = date(datetime.now().year, dateStartH, dateStartD)
-				dateEnd = date(datetime.now().year, dateEndH, dateEndD)
-				break
-		except ValueError:
-			print("Helytelen dátumok!")
-			continue
+			case "-SAVE-": 
+				if values['-DATE1-'] == "" or values['-DATE2-'] == "": 
+					_popup_ok("Hibás dátum.")
+				else:
+					try:
+						
+						dateStart = datetime.strptime(values["-DATE1-"], "%Y/%m/%d").date()
+						dateEnd = datetime.strptime(values["-DATE2-"], "%Y/%m/%d").date()
+					except ValueError:
+						_popup_ok("Létező dátumot adj meg!")
+						continue
+					if dateStart > dateEnd:
+						_popup_ok("A kezdő dátum nem lehet kisebb, mint a befejező dátum!")
+					else: break
+	window.close()
+	
 
 def _recordsQuery(dateStart, dateEnd):
 	_recordsInRange = []
@@ -203,9 +109,9 @@ def _createWindow(insideRecordsNUM, outsideRecordsNUM,
 		[sg.Text("  Lemondott foglalások száma: "), sg.Text(resignedInsideReservations)],
 		[sg.Text("")],
 		[sg.Text("Nem kategorizált")],
-		[sg.Text("	Foglalások száma: ", sg.Text(uncategorizedRecordsNUM))],
-		[sg.Text("	Várólistás foglalások száma: ", sg.Text(uncategorizedRecordsWait))],
-		[sg.Text("	Sikertelen foglalások: ", sg.Text(len(uncategorizedRecords)))]
+		[sg.Text("	Foglalások száma: "), sg.Text(uncategorizedRecordsNUM)],
+		[sg.Text("	Várólistás foglalások száma: "), sg.Text(uncategorizedRecordsWait)],
+		[sg.Text("	Sikertelen foglalások: "), sg.Text(len(uncategorizedRecords))]
 	]
 	window = sg.Window("Statistics", layout)
 
@@ -213,6 +119,7 @@ def _createWindow(insideRecordsNUM, outsideRecordsNUM,
 		event, values = window.read()
 		match event:
 			case sg.WIN_CLOSED | "-EXIT-": break
+	window.close()
 
 def run():
 	_dateInput()
@@ -226,46 +133,38 @@ def run():
 	outsideRecordsNUM = len(outsideRecords) - _categorized[4]
 	uncategorizedRecordsNUM = len(uncategorizedRecords)
 
-	print("Benti recordok száma: ", insideRecordsNUM) #1
-	print("Kinti recordok száma: ", outsideRecordsNUM) #1
-	print("Nem kategorizált recordok száma: ", uncategorizedRecordsNUM) #1
-
+	#2
 	insideRecordsImFullfilled = insideRecordsNUM - _categorized[3]
 	for record in insideRecords:
 		if record.type == "L": insideRecordsImFullfilled -= 1
-	print("\nEgyből teljesített benti recordok száma: ", insideRecordsImFullfilled) #2
+
 	outsideRecordsImFullfilled = outsideRecordsNUM - _categorized[4]
 	for record in outsideRecords:
 		if record.type == "L": outsideRecordsImFullfilled -= 1
-	print("Egyből teljesített benti recordok száma: ", outsideRecordsImFullfilled) #2
 
+	#3
 	insideRecordsWait = 0
 	for record in insideRecords:
 		if record.tables[0] == -1: insideRecordsWait += 1
-	print("\nBenti várólistás recordok száma: ", insideRecordsWait) #3
-	print("Mégis teljesített benti várólistás recordok száma: ", _categorized[3]) #3.2
+
 	outsideRecordsWait = 0
 	for record in outsideRecords:
 		if record.tables[0] == -1: outsideRecordsWait += 1
-	print("Kinti várólistás recordok száma: ", outsideRecordsWait) #3
-	print("Mégis teljesített kinti várólistás recordok száma: ", _categorized[4]) #3.2
+
 	uncategorizedRecordsWait = 0
 	for record in uncategorizedRecords:
 		if record.tables[0] == -1: uncategorizedRecordsWait += 1
-	print("Nem kategorizált várólistás recordok száma: ", uncategorizedRecordsWait) #3
 
+	#4
 	resignedInsideReservations = 0
-	for i in insideRecords:
-		if i.type[0] == "L":
+	for record in insideRecords:
+		if record.type[0] == "L":
 			resignedInsideReservations += 1
-	print("\nLemondott benti foglalások: ", resignedInsideReservations) #4
+
 	resignedOutsideReservations = 0
-	for i in outsideRecords:
-		if i.type[0] == "L":
+	for record in outsideRecords:
+		if record.type[0] == "L":
 			resignedOutsideReservations += 1
-	print("Lemondott kinti foglalások: ", resignedOutsideReservations) #4
-	
-	print("\nSikertelen foglalások: ", len(uncategorizedRecords)) #5
 
 	_createWindow(insideRecordsNUM, outsideRecordsNUM, 
 		  uncategorizedRecordsNUM, insideRecordsImFullfilled, 
