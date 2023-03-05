@@ -115,7 +115,7 @@ def _createWindow(insideRecordsNUM, outsideRecordsNUM,
 		[sg.Text("	Várólistás foglalások száma: "), sg.Text(uncategorizedRecordsWait)],
 		[sg.Text("	Sikertelen foglalások: "), sg.Text(len(uncategorizedRecords))]
 	]
-	window = sg.Window("Statistics", layout)
+	window = sg.Window("Statisztikák", layout)
 
 	while True:
 		event, values = window.read()
