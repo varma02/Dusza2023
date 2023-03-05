@@ -1,7 +1,13 @@
 from datetime import datetime, timedelta
-import glob
+import glob, os
 
 DATA_DIR = "./data/"
+
+if not glob.glob(DATA_DIR):
+	os.mkdir(DATA_DIR)
+if not glob.glob(f"{DATA_DIR}/foglalasok"):
+	os.mkdir(f"{DATA_DIR}/foglalasok")
+
 
 class Record():
 	def __init__(self, name:str, type:str, start:datetime, end:datetime, chairs:int, tables:list[int]):
