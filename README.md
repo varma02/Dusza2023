@@ -26,7 +26,8 @@ A menüpont megjelenését követően több bemeneti mező tárul elénk. A beme
 
 A *"Mentés"* gombot megnyomva lefut a hibaellenőrzés, hogy az elgépelt adatok, vagy a problémás rendelést visszajelezze a program. Ha a rendelés teljesíthető a foglalás rögzítési ablaka hiba nélkül becsukódik, majd a Menü jelenik meg a helyére a hatékonyság érdekében.
 
-Példal:
+Példa:
+
 ![image](https://user-images.githubusercontent.com/57862878/222977858-36a1f420-719d-487e-bbd5-a80ffe74984b.png)
 
 
