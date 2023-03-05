@@ -174,4 +174,5 @@ def run():
 		  resignedInsideReservations, resignedOutsideReservations,
 		  uncategorizedRecords)
 
-run()
+if __name__ == "__main__":
+	run()
