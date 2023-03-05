@@ -5,6 +5,8 @@ Ez a 2023-as Dusza versenyre készített projekt egy olyan program, amely előse
 A program legfrissebb verziója letölthető [innen.](https://github.com/varma02/Dusza2023/releases/tag/latest)
 Letöltés és egyszeri futtatás után a program létrehoz egy `data` mappát. Ebbe fogja tárolni a foglalások adatait. A `data` mappán belül létre kell hozni egy `asztalok.txt` nevű fájlt, melybe soronként egy-egy asztal adatait lehet megadni ebben a formátumban: `asztal_azonosító;székek_száma;hely(K=kültéri, B=beltéri)`
 
+[A fejlesztői dokumentáció itt érhető el.](https://github.com/varma02/Dusza2023/blob/master/Developer.md)
+
 ## Felhasználói felület
 A programot elindítva első látásra a menü fogad minket, ahol az alábbi lehetőségeket választhatjuk:
 - Foglalás rögzítése
