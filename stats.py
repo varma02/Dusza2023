@@ -2,17 +2,20 @@ import PySimpleGUI as sg
 from datetime import date, datetime
 import db
 
+dateStart = None
+dateEnd = None
+
 def _popup_ok(text:str):
 	return sg.PopupOK(text, title="Hiba", no_titlebar=True, grab_anywhere=True, 
 	keep_on_top=True, font=("Arial", 14, "bold"))
 
 def _dateInput():
 	window = sg.Window("Statisztika - Dátumok", [
-		[sg.CalendarButton("Válassz dátumot", target="-DATE1-", font=("Arial", 14), format="%Y/%m/%d"), 
+		[sg.CalendarButton("Válassz kezdő dátumot", target="-DATE1-", font=("Arial", 14), format="%Y/%m/%d"), 
 		sg.Input(key="-DATE1-", expand_x=True, font=("Arial", 14), enable_events=True)],
-		[sg.CalendarButton("Válassz dátumot", target="-DATE2-", font=("Arial", 14), format="%Y/%m/%d"), 
+		[sg.CalendarButton("Válassz záró dátumot", target="-DATE2-", font=("Arial", 14), format="%Y/%m/%d"), 
 		sg.Input(key="-DATE2-", expand_x=True, font=("Arial", 14), enable_events=True)],
-		[sg.Button("Mentés", key="-SAVE-", font=("Arial", 14))]
+		[sg.Button("Generálás", key="-SAVE-", font=("Arial", 14))]
 	])
 
 	global dateStart
@@ -26,7 +29,6 @@ def _dateInput():
 					_popup_ok("Hibás dátum.")
 				else:
 					try:
-						
 						dateStart = datetime.strptime(values["-DATE1-"], "%Y/%m/%d").date()
 						dateEnd = datetime.strptime(values["-DATE2-"], "%Y/%m/%d").date()
 					except ValueError:
@@ -94,21 +96,21 @@ def _createWindow(insideRecordsNUM, outsideRecordsNUM,
 		  resignedInsideReservations, resignedOutsideReservations,
 		  uncategorizedRecords):
 	layout = [
-		[sg.Text("Külső")],
+		[sg.Text("Külső", font=("Arial", 14, "bold"))],
 		[sg.Text("  Foglalási igények száma: "), sg.Text(outsideRecordsNUM)],
 		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text(outsideRecordsImFullfilled)],
 		[sg.Text("  Várólistás foglalások száma: "), sg.Text(outsideRecordsWait)],
 		[sg.Text("    Ebből teljesített: "), sg.Text(completedOutsideWait)],
 		[sg.Text("  Lemondott foglalások száma: "), sg.Text(resignedOutsideReservations)],
 		[sg.Text("")],
-		[sg.Text("Belső")],
+		[sg.Text("Belső", font=("Arial", 14, "bold"))],
 		[sg.Text("  Foglalási igények száma: "), sg.Text(insideRecordsNUM)],
 		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text(insideRecordsImFullfilled)],
 		[sg.Text("  Várólistás foglalások száma: "), sg.Text(insideRecordsWait)],
 		[sg.Text("    Ebből teljesített: "), sg.Text(completedInsideWait)],
 		[sg.Text("  Lemondott foglalások száma: "), sg.Text(resignedInsideReservations)],
 		[sg.Text("")],
-		[sg.Text("Nem kategorizált")],
+		[sg.Text("Nem kategorizált", font=("Arial", 14, "bold"))],
 		[sg.Text("	Foglalások száma: "), sg.Text(uncategorizedRecordsNUM)],
 		[sg.Text("	Várólistás foglalások száma: "), sg.Text(uncategorizedRecordsWait)],
 		[sg.Text("	Sikertelen foglalások: "), sg.Text(len(uncategorizedRecords))]
@@ -123,6 +125,9 @@ def _createWindow(insideRecordsNUM, outsideRecordsNUM,
 
 def run():
 	_dateInput()
+	if not (dateStart or dateEnd):
+		return
+
 	recordsInRange = _recordsQuery(dateStart, dateEnd)
 	pairs = _makePairs(recordsInRange)
 	_categorized = _categorize(recordsInRange, pairs)
