@@ -4,7 +4,7 @@ import db
 
 def generate_layout(year, query:str = None):
 	layout = []
-	records = db.get_records(year, filter_canceled=False, filter_today=False)
+	records = filter(lambda x: x.tables not in ([-1,], [-2,],), db.get_records(year, filter_canceled=False, filter_today=False))
 	for index, item in enumerate(records): 
 		if (not query) or (item.name.lower().strip().find(query.lower().strip()) != -1):
 			layout.append([
@@ -75,7 +75,11 @@ def run():
 					w_record.tables = tables
 					db.append_db(w_record)
 				
-				print(i_records, tables)
+			sg.PopupOK("Foglalás sikeresen törölve", title="Ok", no_titlebar=True, grab_anywhere=True,
+			keep_on_top=True, font=("Arial", 14, "bold"))
+			window.close()
+			window, records = create_window(year, query)
+
 
 	window.close()
 
