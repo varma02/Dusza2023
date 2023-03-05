@@ -6,7 +6,7 @@ def render_table(today=False, year=None) -> list | None:
 	try:
 		return [[
 			x.name, x.start.strftime("%Y/%m/%d  %H:%M") + " - " + x.end.strftime("%H:%M"), x.chairs, ", ".join(map(lambda x: str(x), x.tables))
-		] for x in db.get_records(year if year else datetime.now().year, filter_today=today)]
+		] for x in sorted(db.get_records(year if year else datetime.now().year, filter_today=today), key=lambda x: x.start, reverse=True)]
 	except Exception as e:
 		print(e.with_traceback(e.__traceback__))
 		return None
