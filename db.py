@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import glob
 
 DATA_DIR = "./data/"
@@ -110,7 +110,7 @@ def reserve_table(name:str, start:datetime, end:datetime, chairs:int, type:str =
 	""" Returns a list of tables to be reserved. Or if there are not enough of tables, it returns an empty list and if the person alredy reserved in this interval, it returns false.
 	"""
 	records = get_records(start.year)
-	intersecting_records = intersect_records(start, end, records)
+	intersecting_records = intersect_records(start - timedelta(minutes=10), end, records)
 
 	for r in intersecting_records:
 		if r.name == name and r.tables != [-1,]:
