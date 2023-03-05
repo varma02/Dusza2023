@@ -119,7 +119,7 @@ def _dateInput():
 			dateStartH = 1
 			dateStartD = 1
 			dateEndH = 12
-			dateEndD = 12
+			dateEndD = 31
 			if date(datetime.now().year, dateStartH, dateStartD) > date(datetime.now().year, dateEndH, dateEndD):
 				raise ValueError
 			else:
@@ -180,23 +180,33 @@ def _categorize(_recordsInRange, _pairs):
 
 
 
-def _createWindow():
+def _createWindow(insideRecordsNUM, outsideRecordsNUM, 
+		  uncategorizedRecordsNUM, insideRecordsImFullfilled, 
+		  outsideRecordsImFullfilled, insideRecordsWait, 
+		  completedInsideWait, outsideRecordsWait,
+		  completedOutsideWait, uncategorizedRecordsWait, 
+		  resignedInsideReservations, resignedOutsideReservations,
+		  uncategorizedRecords):
 	layout = [
 		[sg.Text("Külső")],
-		[sg.Text("  Foglalási igények száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Várólistás foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("    Ebből teljesített: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Lemondott foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Nem teljesített foglalások száma: "), sg.Text("PLACEHOLDER")],
+		[sg.Text("  Foglalási igények száma: "), sg.Text(outsideRecordsNUM)],
+		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text(outsideRecordsImFullfilled)],
+		[sg.Text("  Várólistás foglalások száma: "), sg.Text(outsideRecordsWait)],
+		[sg.Text("    Ebből teljesített: "), sg.Text(completedOutsideWait)],
+		[sg.Text("  Lemondott foglalások száma: "), sg.Text(resignedOutsideReservations)],
 		[sg.Text("")],
 		[sg.Text("Belső")],
-		[sg.Text("  Foglalási igények száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Várólistás foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("    Ebből teljesített: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Lemondott foglalások száma: "), sg.Text("PLACEHOLDER")],
-		[sg.Text("  Nem teljesített foglalások száma: "), sg.Text("PLACEHOLDER")]]
+		[sg.Text("  Foglalási igények száma: "), sg.Text(insideRecordsNUM)],
+		[sg.Text("  Azonnal teljesített foglalások: "), sg.Text(insideRecordsImFullfilled)],
+		[sg.Text("  Várólistás foglalások száma: "), sg.Text(insideRecordsWait)],
+		[sg.Text("    Ebből teljesített: "), sg.Text(completedInsideWait)],
+		[sg.Text("  Lemondott foglalások száma: "), sg.Text(resignedInsideReservations)],
+		[sg.Text("")],
+		[sg.Text("Nem kategorizált")],
+		[sg.Text("	Foglalások száma: ", sg.Text(uncategorizedRecordsNUM))],
+		[sg.Text("	Várólistás foglalások száma: ", sg.Text(uncategorizedRecordsWait))],
+		[sg.Text("	Sikertelen foglalások: ", sg.Text(len(uncategorizedRecords)))]
+	]
 	window = sg.Window("Statistics", layout)
 
 	while True:
@@ -216,20 +226,53 @@ def run():
 	outsideRecordsNUM = len(outsideRecords) - _categorized[4]
 	uncategorizedRecordsNUM = len(uncategorizedRecords)
 
-	print("Benti recordok száma: ", insideRecordsNUM)
-	print("Kinti recordok száma: ", outsideRecordsNUM)
-	print("Nem kategorizált recordok száma: ", uncategorizedRecordsNUM)
+	print("Benti recordok száma: ", insideRecordsNUM) #1
+	print("Kinti recordok száma: ", outsideRecordsNUM) #1
+	print("Nem kategorizált recordok száma: ", uncategorizedRecordsNUM) #1
 
-	print("Egyből teljesített benti recordok száma: ", )
-	"""
-	for i in categories[0]:
-		print(i.tables, i.type)
-	print()
-	for i in categories[1]:
-		print(i.tables, i.type)
-	print()
-	for i in categories[2]:
-		print(i.tables, i.type, i.name)
-	print()
-	"""
+	insideRecordsImFullfilled = insideRecordsNUM - _categorized[3]
+	for record in insideRecords:
+		if record.type == "L": insideRecordsImFullfilled -= 1
+	print("\nEgyből teljesített benti recordok száma: ", insideRecordsImFullfilled) #2
+	outsideRecordsImFullfilled = outsideRecordsNUM - _categorized[4]
+	for record in outsideRecords:
+		if record.type == "L": outsideRecordsImFullfilled -= 1
+	print("Egyből teljesített benti recordok száma: ", outsideRecordsImFullfilled) #2
+
+	insideRecordsWait = 0
+	for record in insideRecords:
+		if record.tables[0] == -1: insideRecordsWait += 1
+	print("\nBenti várólistás recordok száma: ", insideRecordsWait) #3
+	print("Mégis teljesített benti várólistás recordok száma: ", _categorized[3]) #3.2
+	outsideRecordsWait = 0
+	for record in outsideRecords:
+		if record.tables[0] == -1: outsideRecordsWait += 1
+	print("Kinti várólistás recordok száma: ", outsideRecordsWait) #3
+	print("Mégis teljesített kinti várólistás recordok száma: ", _categorized[4]) #3.2
+	uncategorizedRecordsWait = 0
+	for record in uncategorizedRecords:
+		if record.tables[0] == -1: uncategorizedRecordsWait += 1
+	print("Nem kategorizált várólistás recordok száma: ", uncategorizedRecordsWait) #3
+
+	resignedInsideReservations = 0
+	for i in insideRecords:
+		if i.type[0] == "L":
+			resignedInsideReservations += 1
+	print("\nLemondott benti foglalások: ", resignedInsideReservations) #4
+	resignedOutsideReservations = 0
+	for i in outsideRecords:
+		if i.type[0] == "L":
+			resignedOutsideReservations += 1
+	print("Lemondott kinti foglalások: ", resignedOutsideReservations) #4
+	
+	print("\nSikertelen foglalások: ", len(uncategorizedRecords)) #5
+
+	_createWindow(insideRecordsNUM, outsideRecordsNUM, 
+		  uncategorizedRecordsNUM, insideRecordsImFullfilled, 
+		  outsideRecordsImFullfilled, insideRecordsWait, 
+		  _categorized[3], outsideRecordsWait,
+		  _categorized[4], uncategorizedRecordsWait, 
+		  resignedInsideReservations, resignedOutsideReservations,
+		  uncategorizedRecords)
+
 run()
