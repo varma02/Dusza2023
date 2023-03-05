@@ -8,6 +8,7 @@ def render_table():
 	reserved_tables: list[int] = []
 	table = []
 	for r in records:
+		if r.tables == [-1,]: continue
 		reserved_tables.extend(r.tables)
 		r.tables.sort()
 		table.append([
