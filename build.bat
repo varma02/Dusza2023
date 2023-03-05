@@ -1,1 +1,3 @@
-pyinstaller --noconfirm --onefile --windowed --icon "C:/Users/varma/Desktop/000020.6f19a4fe.2026610219.postprocessed.ico" --clean --exclude-module "data" --exclude-module "dist"  "C:/Users/varma/Documents/VERSENY/Dusza2023/main.py"
+pyinstaller --noconfirm --onefile --windowed --icon "./icon.ico" --clean --exclude-module "data" --exclude-module "dist"  "./main.py" --clean
+rmdir /q /s .\build
+del /q .\main.spec
