@@ -2,11 +2,13 @@ import PySimpleGUI as sg
 from datetime import datetime
 import db
 
-def render_table(today=False, year=None) -> list | None:
+def render_table(today=False, year=None, sort:str="date") -> list | None:
 	try:
 		return [[
 			x.name, x.start.strftime("%Y/%m/%d  %H:%M") + " - " + x.end.strftime("%H:%M"), x.chairs, ", ".join(map(lambda x: str(x), x.tables))
-		] for x in sorted(db.get_records(year if year else datetime.now().year, filter_today=today), key=lambda x: x.start, reverse=True)]
+		] for x in sorted(db.get_records(year if year else datetime.now().year, filter_today=today), 
+		key=lambda x: x.start if sort == "date" else x.name,
+		reverse=True if sort == "date" else False)]
 	except Exception as e:
 		print(e.with_traceback(e.__traceback__))
 		return None
@@ -29,6 +31,7 @@ def run():
 				auto_size_columns = True,
 				vertical_scroll_only = True,
 				row_height = 18,
+				enable_click_events=True
 			)
 		]
 	]
@@ -45,6 +48,10 @@ def run():
 			case sg.WIN_CLOSED | "-EXIT-": break
 			case "-FILTER-TODAY-" | "-FILTER-YEAR-": 
 				window["-TABLE-"].update(values = render_table(values["-FILTER-TODAY-"], values["-FILTER-YEAR-"]))
+		
+		if type(event) == tuple and event[0] == "-TABLE-":
+			window["-TABLE-"].update(values = render_table(values["-FILTER-TODAY-"], values["-FILTER-YEAR-"], "name" if event[2][1] == 0 else "date"))
+
 
 	window.close()
 
