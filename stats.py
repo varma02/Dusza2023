@@ -7,7 +7,7 @@ def _popup_ok(text:str):
 	keep_on_top=True, font=("Arial", 14, "bold"))
 
 def _dateInput():
-	window = sg.Window("ASD", [
+	window = sg.Window("Statisztika - Dátumok", [
 		[sg.CalendarButton("Válassz dátumot", target="-DATE1-", font=("Arial", 14), format="%Y/%m/%d"), 
 		sg.Input(key="-DATE1-", expand_x=True, font=("Arial", 14), enable_events=True)],
 		[sg.CalendarButton("Válassz dátumot", target="-DATE2-", font=("Arial", 14), format="%Y/%m/%d"), 
