@@ -1,15 +1,11 @@
-## Legfrissebb verzió elérése, letöltése:
-https://github.com/varma02/Dusza2023/releases/tag/latest
-
-## Fejlesztői dokumentáció:
-https://github.com/varma02/Dusza2023/blob/master/Developer.md
-
-****
-
-
-
 # Asztalfoglalás
 Ez a 2023-as Dusza versenyre készített projekt egy olyan program, amely elősegíti egy étterem asztalfoglalási folyamatát. A program könnyen kezelhető, és lehetővé teszi a foglalások és lemondások egyszerű kezelését. Emellett a feljegyzett adatokból statisztikák is készíthetők.
+
+## Letöltés / Első lépések
+A program legfrissebb verziója letölthető [innen.](https://github.com/varma02/Dusza2023/releases/tag/latest)
+Letöltés és egyszeri futtatás után a program létrehoz egy `data` mappát. Ebbe fogja tárolni a foglalások adatait. A `data` mappán belül létre kell hozni egy `asztalok.txt` nevű fájlt, melybe soronként egy-egy asztal adatait lehet megadni ebben a formátumban: `asztal_azonosító;székek_száma;hely(K=kültéri, B=beltéri)`
+
+[A fejlesztői dokumentáció itt érhető el.](https://github.com/varma02/Dusza2023/blob/master/Developer.md)
 
 ## Felhasználói felület
 A programot elindítva első látásra a menü fogad minket, ahol az alábbi lehetőségeket választhatjuk:
@@ -82,5 +78,3 @@ Többek közt láthatóak a várólistára került foglalások száma, a lemondo
 Természetesen ezt is külön beltérre és kültérre bontva láthatja az olvasó annak érdekében, hogy ha pl. az étterem jövőbeli bővítést tervez, akkor tudja mely tere(ke)t kell bővítenie. Sok más célra is hasznos lehet ez a lehetőség.
 
 ![image](https://user-images.githubusercontent.com/57862878/222978156-dfa83e8e-07b9-4681-b703-b687e409bc59.png)
-
-
