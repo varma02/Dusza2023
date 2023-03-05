@@ -55,7 +55,7 @@ def run():
 		match event:
 			case "-SEARCH-":
 				window.close()
-				window = create_window(year, query)
+				window, records = create_window(year, query)
 			case "-QUERY-": query = values["-QUERY-"]
 			case "-YEAR-": year = values["-YEAR-"]
 			case sg.WIN_CLOSED | "-EXIT-": break
