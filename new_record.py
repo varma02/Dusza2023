@@ -19,7 +19,7 @@ def _validate_input(values) -> bool:
 			_popup_ok("Az időpont nem lehet a múltban!")
 			return False
 		if start_datetime > end_datetime:
-			_popup_ok("A kezdő időpont nem lehet a végső előtt!")
+			_popup_ok("A kezdő időpont nem lehet a záró előtt!")
 			return False
 	except ValueError:
 		_popup_ok("Létező időpontot adj meg!")
@@ -50,7 +50,7 @@ def run():
 			sg.Text(":", font=("Arial", 14, "bold")), 
 			sg.Combo(list(range(0, 60)), 0, key="-START-M-", expand_x=True, font=("Arial", 14)),
 		],[
-			sg.Text("Végső időpont: ", font=("Arial", 14)), 
+			sg.Text("Záró időpont: ", font=("Arial", 14)), 
 			sg.Combo(list(range(6, 23)), datetime.now().hour+2, key="-END-H-", expand_x=True, font=("Arial", 14)),
 			sg.Text(":", font=("Arial", 14, "bold")), 
 			sg.Combo(list(range(0, 60)), 0, key="-END-M-", expand_x=True, font=("Arial", 14)),

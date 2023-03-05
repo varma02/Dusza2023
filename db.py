@@ -94,6 +94,11 @@ def get_years() -> list[int]:
 	return list(map(lambda x: int(x[:-4]), glob.glob("*.txt", root_dir=f"{DATA_DIR}/foglalasok/", recursive=False)))
 
 def intersect_records(start:datetime, end:datetime, records:list[Record]):
+	""" Returns the Records intersecting with the given time interval.
+	`start`: Starting datetime
+	`end`: Ending datetime
+	`records`: Records to check
+	"""
 	intersecting_records:list[Record] = []
 	for r in records:
 		if max(r.start, start) <= min(r.end, end):
