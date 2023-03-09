@@ -1,15 +1,11 @@
-## Legfrissebb verzió elérése, letöltése:
-https://github.com/varma02/Dusza2023/releases/tag/latest
-
-## Fejlesztői dokumentáció:
-https://github.com/varma02/Dusza2023/blob/master/Developer.md
-
-****
-
-
-
 # Asztalfoglalás
 Ez a 2023-as Dusza versenyre készített projekt egy olyan program, amely elősegíti egy étterem asztalfoglalási folyamatát. A program könnyen kezelhető, és lehetővé teszi a foglalások és lemondások egyszerű kezelését. Emellett a feljegyzett adatokból statisztikák is készíthetők.
+
+## Letöltés / Első lépések
+A program legfrissebb verziója letölthető [innen.](https://github.com/varma02/Dusza2023/releases/tag/latest)
+Letöltés és egyszeri futtatás után a program létrehoz egy `data` mappát. Ebbe fogja tárolni a foglalások adatait. A `data` mappán belül létre kell hozni egy `asztalok.txt` nevű fájlt, melybe soronként egy-egy asztal adatait lehet megadni ebben a formátumban: `asztal_azonosító;székek_száma;hely(K=kültéri, B=beltéri)`
+
+[A fejlesztői dokumentáció itt érhető el.](https://github.com/varma02/Dusza2023/blob/master/Developer.md)
 
 ## Felhasználói felület
 A programot elindítva első látásra a menü fogad minket, ahol az alábbi lehetőségeket választhatjuk:
@@ -60,8 +56,8 @@ A program egy listát fog mutatni a keresési feltételeknek megfelelően, és e
 Ahhoz, hogy az eddigi foglalásokat meg lehessen tekinteni, a felhasználónak a *"Foglalások listája"* gombot kell működtetnie.
 ![image](https://user-images.githubusercontent.com/57862878/222977996-4e6a7b81-0610-450f-8cab-d8840f5cacbb.png)
 Annak érdekében, hogy a foglalásokat ellenőrző munkatárs hatékonyan a kívánt információhoz juthasson szűrési lehetőségeket készítettünk. Lehetősége van az évet kiválasztania, ezen kívül az aktuális napi foglalásokat is megtekintheti.
-![image](https://user-images.githubusercontent.com/57862878/222978021-bc9c2ea5-cac3-4608-b9ef-100eac8e3b44.png)
-![image](https://user-images.githubusercontent.com/57862878/222978034-36708ccd-85b8-438a-814f-c375989f4daf.png)
+![image](https://user-images.githubusercontent.com/57862878/222980106-56fd0e60-1f7b-4a7a-ab33-821d1370b511.png)
+
 
 A megjelenő táblázatban a következő oszlopok találhatóak: Név, Dátum (kezdő- hónap, nap, óra, perc; végző óra, perc), Székek száma, és a lefoglalt asztalok számai. A csúszkát használva lehet a többi, a képernyőről lelógó adatot megtekinteni. Igény esetén oszloponként, értékek szerint is lehet rendezni úgy, hogy a táblázat címsorában a kívánt rendezési szempontra nyom.
 
@@ -82,5 +78,3 @@ Többek közt láthatóak a várólistára került foglalások száma, a lemondo
 Természetesen ezt is külön beltérre és kültérre bontva láthatja az olvasó annak érdekében, hogy ha pl. az étterem jövőbeli bővítést tervez, akkor tudja mely tere(ke)t kell bővítenie. Sok más célra is hasznos lehet ez a lehetőség.
 
 ![image](https://user-images.githubusercontent.com/57862878/222978156-dfa83e8e-07b9-4681-b703-b687e409bc59.png)
-
-
