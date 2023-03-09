@@ -4,7 +4,7 @@ import db
 
 def generate_layout(year, query:str = None):
 	layout = []
-	records = filter(lambda x: x.tables not in ([-1,], [-2,],), db.get_records(year, filter_canceled=False, filter_today=False))
+	records = list(filter(lambda x: x.tables not in ([-1,], [-2,],), db.get_records(year, filter_canceled=False, filter_today=False)))
 	for index, item in enumerate(records): 
 		if (not query) or (item.name.lower().strip().find(query.lower().strip()) != -1):
 			layout.append([
